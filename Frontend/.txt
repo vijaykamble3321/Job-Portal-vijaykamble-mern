@@ -1,0 +1,11 @@
+//get register employers compony detail and put update the status //are both
+
+admin-admin ,pass-admin
+employe-vijay1@gmail.com, pass-vijay1
+user-vijay@gmail.com,pass-vijay
+
+
+in jobcreated add the list showw all jobs /
+
+5/4/2025/in job view user work
+

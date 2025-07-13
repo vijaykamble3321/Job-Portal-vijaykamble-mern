@@ -1,0 +1,187 @@
+User Roles
+
+=Job Seekers (Candidates)
+
+Sign up, log in, and manage profiles
+Search for jobs based on filters (location, category, experience, salary, etc.)
+Apply for jobs and track applications
+Upload resumes and profile images
+Save favorite job listings
+Receive job alerts & notifications
+
+=Employers
+
+Register, log in, and manage company profiles
+Post job listings with details (title, description, salary, requirements, etc.)
+View job applications and contact candidates
+Shortlist applicants and schedule interviews
+
+=Admin
+
+Manage all users (job seekers & employers)
+Approve or reject employer accounts
+Monitor job postings and applications
+View analytics and reports (e.g., number of jobs posted, applications received)
+Handle reported job listings and spam prevention
+
+
+
+
+
+=================================================================
+API Routes
+Public APIs (/api/public)
+
+-Auth (/auth)
+POST /register → Register job seeker/employer(user)
+POST /login → Login user
+POST /forgot-password → Password recovery
+POST /reset-password → Reset password
+
+
+-------------------------------------------------------------------
+
+-User Profile (/user)
+
+GET /profile → Get user profile
+PUT /update-profile → Update user details
+(POST /upload-resume → Upload job seeker's resume)
+
+-Jobs (/jobs)
+GET /jobs → Get all job listings(view jobs)
+GET /jobs/:id → Get details of a specific job(view One jobs)
+POST /apply → Apply for a job
+
+---------------------------------------------------------------------
+-Employers (/employer)
+
+Profile (/profile)
+
+
+Jobs (/jobs)
+POST /create-job → Post a new job listing
+PUT /update-job/:id → Edit job details
+DELETE /delete-job/:id → Remove a job listing
+GET /view-applications/:jobId → View applications for a job
+
+
+-Job Applications (/applications)
+GET /user-applications → View applied jobs
+POST /resonse of application (selected)
+DELETE /:applicationId → delete an application
+
+
+----------------------------------------------------------------------
+
+-Admin (/admin)
+
+Users(/users)
+getall
+getone
+
+
+
+Employers(/employer)
+getall
+getone
+updateone (approve or correction)
+deleteone
+
+
+Jobs(/jobs)
+get all jobs (sort)
+pause listing (visible false)
+spam-reported
+
+
+
+
+Analytics (/analytics)
+
+
+
+GET /users → Manage all users
+GET /jobs → View all job listings
+PUT /approve-employer/:id /jobId → Approve employer accounts
+DELETE /delete-user/:id → Remove a user
+
+
+
+========================================================================
+
+
+=user schma
+
+const mongoose = require("mongoose");
+
+const UserSchema = new mongoose.Schema({
+  fname: { type: String, required: true },
+  lname: { type: String, required: true },
+  email: { type: String, unique: true, required: true },
+  password: { type: String, required: true },
+  role: { type: String, enum: ["jobseeker", "employer", "admin"], required: true },
+  createdAt: { type: Date, default: Date.now },
+});
+
+
+=============================================================================
+
+
+=job schema
+
+
+module.exports = mongoose.model("User", UserSchema);
+const mongoose = require("mongoose");
+
+const JobSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  salary: { type: String, required: true },
+  category: { type: String, required: true },
+  location: { type: String, required: true },
+  experience: { type: String, required: true },
+  employerId: { type: mongoose.Schema.Types.ObjectId, ref: "employer", required: true },
+  createdAt: { type: Date, default: Date.now },
+});
+
+module.exports = mongoose.model("Job", JobSchema);
+
+
+==================================================================================
+
+
+
+application schema
+
+
+const mongoose = require("mongoose");
+
+const ApplicationSchema = new mongoose.Schema({
+  jobId: { type: mongoose.Schema.Types.ObjectId, ref: "Job", required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  resume: { type: String, required: true },
+  status: { type: String, enum: ["Pending", "Shortlisted", "Rejected"], default: "Pending" },
+  appliedAt: { type: Date, default: Date.now },
+});
+
+module.exports = mongoose.model("Application", ApplicationSchema);
+
+
+
+
+employerSchema{
+  employerName - Suyotech
+  Legal Name - Suyotech Soluiton Pvt
+  sector - []
+  category - 
+  contact-person [userid,userid,useridm]
+  addresss
+  approved
+  deleted : false
+}
+
+
+
+
+
+//Jobs found: []
